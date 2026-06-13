@@ -101,43 +101,6 @@ public_url = ""                # leave blank for auto-detect
 
 ---
 
-## Channel Server (standalone / headless)
-
-The channel server is bundled inside the Broadcaster app, but you can also run it headless on a VPS for 24/7 channels that don't depend on your home machine staying on.
-
-```bash
-cd packages/channel-server
-npm install
-node src/index.js /path/to/channel.toml
-```
-
-Working files (HLS segments, cache, playlist) are written to `~/Movies/Zender/<channel-name>/` on macOS and `~/Videos/Zender/<channel-name>/` on Windows/Linux.
-
-**Headless on a VPS with systemd:**
-
-```ini
-# /etc/systemd/system/zender-channel.service
-[Unit]
-Description=Zender Channel Server
-After=network.target
-
-[Service]
-ExecStart=/usr/bin/node /opt/zender/packages/channel-server/src/index.js /opt/zender/channel.toml
-WorkingDirectory=/opt/zender
-Restart=on-failure
-User=zender
-Environment=NODE_ENV=production
-
-[Install]
-WantedBy=multi-user.target
-```
-
-```bash
-systemctl enable --now zender-channel
-```
-
----
-
 ## Stream pipeline
 
 Two-stage architecture that keeps broadcast-time CPU near zero:
@@ -268,6 +231,43 @@ npm run tauri build
 
 cd ..\broadcaster
 npm run tauri build
+```
+
+---
+
+## Headless / 24-7 Channels
+
+The Broadcaster app manages the channel server automatically, but you can also run it headless on a VPS so your channel stays on air without your home machine being on.
+
+```bash
+cd packages/channel-server
+npm install
+node src/index.js /path/to/channel.toml
+```
+
+Working files (HLS segments, cache, playlist) are written to `~/Movies/Zender/<channel-name>/` on macOS and `~/Videos/Zender/<channel-name>/` on Windows/Linux.
+
+**Keeping it running with systemd:**
+
+```ini
+# /etc/systemd/system/zender-channel.service
+[Unit]
+Description=Zender Channel Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /opt/zender/packages/channel-server/src/index.js /opt/zender/channel.toml
+WorkingDirectory=/opt/zender
+Restart=on-failure
+User=zender
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+systemctl enable --now zender-channel
 ```
 
 ---
