@@ -50,7 +50,7 @@
     }
 
     lines.push('[directory]');
-    lines.push(`url    = ${JSON.stringify(d.url ?? 'http://localhost:3001')}`);
+    lines.push(`url    = ${JSON.stringify(d.url ?? 'https://zender-directory.fly.dev')}`);
     lines.push(`public = ${d.public !== false}`);
     lines.push('');
     lines.push('[server]');

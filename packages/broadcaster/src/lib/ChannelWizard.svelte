@@ -26,7 +26,7 @@
   let resolution = $state('1280x720');
   let videoBitrate = $state('2500k');
   let audioBitrate = $state('128k');
-  let directoryUrl = $state('http://localhost:3001');
+  let directoryUrl = $state('https://zender-directory.fly.dev');
   let serverPort = $state(8047);
 
   let saving = $state(false);
