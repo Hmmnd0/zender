@@ -1,5 +1,5 @@
 <script>
-  import { skip, standby, dequeueFile } from './channel-server.js';
+  import { skip, standby, resume, dequeueFile } from './channel-server.js';
 
   let { state: s, logs = [] } = $props();
 
@@ -24,11 +24,14 @@
   // pendingQueue items are now { path, name } objects
   const pending = $derived(s.pendingQueue ?? []);
 
+  const isStandby = $derived(s.nowPlaying === 'STANDBY');
+
   let standbyError = $state(null);
-  async function handleStandby() {
+  async function handleStandbyToggle() {
     standbyError = null;
     try {
-      await standby();
+      if (isStandby) await resume();
+      else await standby();
     } catch (e) {
       standbyError = e.message;
       setTimeout(() => { standbyError = null; }, 4000);
@@ -86,8 +89,14 @@
 
   <div class="section-header" style="margin-top:auto">CONTROLS</div>
   <div class="actions">
-    <button onclick={() => skip()} disabled={!s.onAir} title="Skip to next item in queue">⏭ Skip</button>
-    <button onclick={handleStandby} disabled={!s.onAir} class="danger" title="Cut to standby screen">⚠ Standby</button>
+    <button onclick={() => skip()} disabled={!s.onAir || isStandby} title="Skip to next item in queue">⏭ Skip</button>
+    <button
+      onclick={handleStandbyToggle}
+      disabled={!s.onAir}
+      class:danger={!isStandby}
+      class:resume={isStandby}
+      title={isStandby ? 'Resume broadcast' : 'Cut to standby screen'}
+    >{isStandby ? '▶ Resume' : '⚠ Standby'}</button>
   </div>
   {#if standbyError}
     <div class="standby-error">{standbyError}</div>
@@ -215,6 +224,8 @@
   button:not(:disabled):hover { background: #222; }
   button.danger { border-color: #a00; color: #f88; }
   button.danger:not(:disabled):hover { background: #1a0000; }
+  button.resume { border-color: #4a9; color: #4f4; }
+  button.resume:not(:disabled):hover { background: #0d1a12; }
 
   .standby-error {
     padding: 0.3rem 0.5rem;

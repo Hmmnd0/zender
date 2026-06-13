@@ -413,11 +413,31 @@ app.post('/control/standby', async (req, res) => {
   const standbySrc = join(cacheDir, 'standby.ts');
   if (!existsSync(standbySrc)) return res.status(400).json({ error: 'standby.ts not found in cache' });
   if (!broadcaster) return res.status(400).json({ error: 'not on air' });
+  feeder?.stop();
+  feeder = null;
   broadcaster.skip();
   broadcaster.restartFrom(standbySrc);
   nowPlaying = 'STANDBY';
   broadcast(getState());
   res.json({ ok: true });
+});
+
+app.post('/control/resume', async (req, res) => {
+  if (!broadcaster) return res.status(400).json({ error: 'not on air' });
+  const next = scheduler.next(null);
+  if (!next) return res.status(400).json({ error: 'nothing in scheduler' });
+
+  const norm = await normalizeWithProgress(next);
+
+  broadcaster.skip();
+  broadcaster.restartFrom(norm);
+  nowPlaying = next.split('/').pop()?.replace(/(\.\w{2,4})?\.norm\.ts$/, '').replace(/\.\w{2,4}$/, '') ?? next;
+  broadcast(getState());
+
+  res.json(getState());
+
+  feeder = makeFeeder();
+  feeder.start(next, norm).catch(e => console.error('[resume] feeder error:', e.message));
 });
 
 app.get('/control/state', (_req, res) => res.json(getState()));

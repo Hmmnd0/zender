@@ -101,6 +101,13 @@ export async function standby() {
   return body;
 }
 
+export async function resume() {
+  const res = await fetch(`${BASE}/control/resume`, { method: 'POST' });
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.error ?? 'Resume failed');
+  return body;
+}
+
 export async function normalizeFile(file) {
   const res = await fetch(`${BASE}/control/normalize`, {
     method: 'POST',
