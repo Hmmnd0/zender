@@ -1,0 +1,30 @@
+node_modules/
+target/
+dist/
+.svelte-kit/
+
+# macOS
+.DS_Store
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# Tauri build output
+packages/*/src-tauri/target/
+
+# HLS segments and cache (live in ~/Movies/Zender/ at runtime)
+public/
+cache/
+*.m3u8
+seg_*.ts
+playlist.txt
+thumb.jpg
+
+# Env
+.env
+.env.local
+
+# Editor
+.vscode/settings.json

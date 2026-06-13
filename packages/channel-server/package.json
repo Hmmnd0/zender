@@ -1,0 +1,21 @@
+{
+  "name": "@zender/channel-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "zender-server": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "express": "^4.21.2",
+    "toml": "^3.0.0",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.2"
+  }
+}

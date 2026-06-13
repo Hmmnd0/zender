@@ -1,0 +1,31 @@
+# fly.toml — Zender Directory Server on Fly.io
+# Deploy: fly launch --no-deploy && fly vol create zender_data -s 1 -r <region> && fly deploy
+
+app = "zender-directory"
+primary_region = "ord"  # Chicago — change to nearest: ewr, lax, lhr, fra, sin, syd
+
+[build]
+
+[env]
+  PORT = "3001"
+  NODE_ENV = "production"
+
+[http_service]
+  internal_port = 3001
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 250
+    soft_limit = 200
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
+
+[[mounts]]
+  source = "zender_data"
+  destination = "/app/data"

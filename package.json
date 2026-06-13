@@ -1,0 +1,17 @@
+{
+  "name": "zender",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "directory": "npm -w packages/directory-server start",
+    "channel-server": "npm -w packages/channel-server start",
+    "viewer": "npm -w packages/viewer dev",
+    "dev": "concurrently \"npm run directory\" \"npm run viewer\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

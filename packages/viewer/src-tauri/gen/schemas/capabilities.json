@@ -1,0 +1,1 @@
+{"default":{"identifier":"default","description":"Zender Viewer default capabilities","local":true,"windows":["main","miniplayer"],"permissions":["core:default","store:default","notification:default"]}}

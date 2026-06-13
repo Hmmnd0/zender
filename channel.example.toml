@@ -1,0 +1,50 @@
+[channel]
+name        = "Channel 47: Saturday Cartoons"
+description = "80s cartoons, all day, forever."
+genre       = "animation"
+type        = "tv"
+logo        = "logo.png"
+
+[stream]
+resolution      = "1280x720"
+video_bitrate   = "2500k"
+audio_bitrate   = "128k"
+fps             = 30
+segment_seconds = 6
+
+[scheduler]
+mode = "schedule"
+
+[[scheduler.blocks]]
+days   = ["mon","tue","wed","thu","fri"]
+start  = "06:00"
+folder = "media/cartoons"
+order  = "shuffle"
+
+[[scheduler.blocks]]
+days   = ["mon","tue","wed","thu","fri"]
+start  = "10:00"
+folder = "media/movies"
+order  = "sequential"
+
+[[scheduler.blocks]]
+days   = ["sat","sun"]
+start  = "08:00"
+folder = "media/cartoons"
+order  = "shuffle"
+
+[[scheduler.rules]]
+every_minutes = 60
+folder        = "media/ids"
+pick          = "random"
+
+[directory]
+url    = "http://localhost:3001"
+public = true
+
+# mode: "relay" (recommended, IP private) or "direct" (lower latency, IP exposed)
+[server]
+port       = 8047
+mode       = "relay"
+relay_url  = ""        # set to your relay ingest URL, e.g. https://relay.zender.example/ingest/<channel-id>/
+public_url = ""        # auto-detected when blank; override if behind a relay
